@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="users">
+    <insert id="insert">
+        INSERT INTO recipebook_user
+        (id, pwd, email, regdate)
+        VALUES(#{id}, #{pwd}, #{email}, SYSDATE)
+    </insert>
+    
+    <select id="getData" parameterType="String" resultType="usersDto">
+        SELECT id, pwd, email, profile, regdate
+        FROM recipebook_user
+        WHERE id = #{id}
+    </select>
+    
+    <update id="updatePwd" parameterType="usersDto">
+        UPDATE recipebook_user
+        SET pwd = #{newPwd}
+        WHERE id = #{id}
+    </update>
+    
+    <update id="update" parameterType="usersDto">
+        UPDATE recipebook_user
+        SET email = #{email}
+            <!-- profile은 기본값이 null이기 때문에 확인 필요 -->
+            <if test="profile != null">
+                , profile = #{profile}
+            </if>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="delete" parameterType="String">
+        DELETE FROM recipebook_user
+        WHERE id = #{id}
+    </delete>
+    
+    <select id="isExist" parameterType="String" resultType="int">
+        SELECT COUNT(id)
+        FROM recipebook_user
+        WHERE id = #{id}
+    </select>
+</mapper>
